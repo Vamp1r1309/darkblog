@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 '''
 Category => title, slug
@@ -9,19 +10,22 @@ Post => title, slug, content, author, created_at, photo, views, category, tags
 
 class Category(models.Model):
     title = models.CharField(max_length=255, verbose_name="Наименовании Категории")
-    slug = models.SlugField(max_length=255, verbose_name='УРЛС', unique=True)
+    slug = models.SlugField(max_length=255, verbose_name='Slug', unique=True)
 
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'slug': self.slug})
+
     class Meta:
-        verbose_name = 'Категорию'
+        verbose_name = 'Категория(ю)'
         verbose_name_plural = 'Категории'
         ordering = ['title']
 
 class Tag(models.Model):
     title = models.CharField(max_length=255, verbose_name="Наименовании Тега")
-    slug = models.SlugField(max_length=50, verbose_name='УРЛС', unique=True)
+    slug = models.SlugField(max_length=50, verbose_name='Slug', unique=True)
 
     def __str__(self):
         return self.title
