@@ -52,6 +52,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'slug': self.slug})
+
     class Meta:
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
