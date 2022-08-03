@@ -24,11 +24,10 @@ class Home(ListView):
         return context
 
 class PostsByCategory(ListView):
-    model = Post
     template_name = 'blog/category.html'
-    context_object_name = 'posts'
+    context_object_name = 'category'
     paginate_by = paginations
-    allow_empty = True
+    allow_empty = False
 
     def get_queryset(self):
         return Post.objects.filter(category__slug=self.kwargs['slug'])
@@ -40,7 +39,20 @@ class PostsByCategory(ListView):
 
 
 class PostByTag(ListView):
-    pass
+    template_name = 'blog/category.html'
+    context_object_name = 'category'
+    paginate_by = paginations
+    allow_empty = False
+
+
+    def get_queryset(self):
+        return Post.objects.filter(tags__slug=self.kwargs['slug'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Записи по тегу: ' + str(Tag.objects.get(slug=self.kwargs['slug']))
+        return context
+
 
 class GetPost(DetailView):
     model = Post
@@ -52,6 +64,5 @@ class GetPost(DetailView):
         self.object.views = F('views') + 1
         self.object.save()
         self.object.refresh_from_db()
-        return super().get_context_data(**kwargs)
-
+        return context
 
