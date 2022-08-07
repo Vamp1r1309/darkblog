@@ -9,8 +9,3 @@ register = template.Library()
 def show_menu(menu_class='menu'):
     categories = Category.objects.all()
     return {"categories": categories, "menu_class": menu_class}
-
-@register.inclusion_tag('blog/categories.html',)
-def show_category():
-    categories = Category.objects.all()
-    return {'categories': categories}

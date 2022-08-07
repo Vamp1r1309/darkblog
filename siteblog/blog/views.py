@@ -1,5 +1,6 @@
 from distutils.log import debug
 from multiprocessing import context
+from turtle import title
 from typing import List
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
@@ -25,9 +26,10 @@ class Home(ListView):
 
 class PostsByCategory(ListView):
     template_name = 'blog/category.html'
-    context_object_name = 'category'
+    context_object_name = 'posts'
     paginate_by = paginations
     allow_empty = False
+    
 
     def get_queryset(self):
         return Post.objects.filter(category__slug=self.kwargs['slug'])
@@ -40,7 +42,7 @@ class PostsByCategory(ListView):
 
 class PostByTag(ListView):
     template_name = 'blog/category.html'
-    context_object_name = 'category'
+    context_object_name = 'posts'
     paginate_by = paginations
     allow_empty = False
 
@@ -64,5 +66,20 @@ class GetPost(DetailView):
         self.object.views = F('views') + 1
         self.object.save()
         self.object.refresh_from_db()
+        return context
+
+
+class Search(ListView):
+    template_name = 'blog/search.html'
+    context_object_name = 'posts'
+    paginate_by = paginations
+
+
+    def get_queryset(self):
+        return Post.objects.filter(title__icontains=self.request.GET.get('s'))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['s'] = f"s={self.request.GET.get('s')}&"
         return context
 

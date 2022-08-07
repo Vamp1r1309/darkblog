@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'ckeditor',
+    'mptt',
     'blog.apps.BlogConfig',
+    'testapp.apps.TestappConfig',
 ]
 
 MIDDLEWARE = [
@@ -219,3 +221,5 @@ DEBUG_TOOLBAR_CONFIG = {
     ],
     'SHOW_TEMPLATE_CONTEXT': True,
 }
+
+MPTT_ADMIN_LEVEL_INDENT = 20
